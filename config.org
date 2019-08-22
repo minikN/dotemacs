@@ -1,0 +1,196 @@
+* Emacs Configuration
+** Variables
+#+BEGIN_SRC emacs-lisp
+  (defvar TERM_SHELL "/bin/bash")
+#+END_SRC
+** Aliases
+y/n instead of yes/no:
+#+BEGIN_SRC emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** Packages
+*** Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package monokai-pro-theme
+    :ensure t
+    :config
+    (load-theme 'monokai-pro t))
+#+END_SRC
+*** which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode))
+#+END_SRC
+*** org-bullets
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
+#+END_SRC
+*** Avy (Searching in buffer)
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind
+    ("M-s" . avy-goto-char))
+#+END_SRC
+** Keybindings
+Terminal:
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<s-return>") 'ansi-term)
+#+END_SRC
+
+Config:
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c e") 'config-edit)
+  (global-set-key (kbd "C-c r") 'config-reload)
+#+END_SRC
+
+Buffers:
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+END_SRC
+
+Windows:
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x 2") 'split-and-focus-h)
+  (global-set-key (kbd "C-x 3") 'split-and-focus-v)
+#+END_SRC
+** Functions
+*** config
+#+BEGIN_SRC emacs-lisp
+  (defun config-edit ()
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (defun config-reload ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+#+END_SRC
+*** windows
+Focus new window after creation
+#+BEGIN_SRC emacs-lisp 
+  (defun split-and-focus-h ()
+    (interactive)
+    (split-window-below)
+    (balance-windows)
+    (other-window 1))
+
+  (defun split-and-focus-v ()
+    (interactive)
+    (split-window-right)
+    (balance-windows)
+    (other-window 1))
+#+END_SRC
+** UI
+Remove tool-, menu- and scrollbar:
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1) 
+#+END_SRC
+
+Remove startup buffer:
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+#+END_SRC
+
+Set frame margins width:
+#+BEGIN_SRC emacs-lisp
+  (setq-default left-margin-width 1 right-margin-width 1)
+  (set-window-buffer nil (current-buffer))
+#+END_SRC
+
+Set frame margin color:
+#+BEGIN_SRC emacs-lisp
+  (set-face-background 'fringe "transparent")
+#+END_SRC
+
+** Editor
+Enable normal scroll mode:
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-conservatively 100)
+#+END_SRC
+
+Mute the bell:
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+Highlight current line
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode t)
+#+END_SRC
+
+Make TAB indent or autocomplete based on cursor position:
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-always-indent nil)
+#+END_SRC
+
+Prettify lambda to symbol
+#+BEGIN_SRC emacs-lisp
+  (global-prettify-symbols-mode t)
+#+END_SRC
+
+Autocomplete (, [, {
+#+BEGIN_SRC emacs-lisp
+  (setq electric-pair-pairs '(
+			      (?\( . ?\))
+			      (?\[ . ?\])
+			      (?\{ . ?\})
+			      (?\" . ?\")
+			      (?\' . ?\')
+			      ))
+  (electric-pair-mode 1)
+#+END_SRC
+** Terminal
+Set the default shell to bash for =ansi-term=:
+#+BEGIN_SRC emacs-lisp
+  (defadvice ansi-term (before force-bash)
+    (interactive (list TERM_SHELL)))
+  (ad-activate 'ansi-term)
+#+END_SRC
+** Other
+No backups/autosaves:
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-file nil)
+  (setq auto-save-default nil)
+#+END_SRC
+** IDO (Switching buffers)
+Enabling IDO mode
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching nil)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+#+END_SRC
+
+Enabling IDO vertical
+#+BEGIN_SRC emacs-lisp
+  (use-package ido-vertical-mode
+    :ensure t
+    :init
+    (ido-vertical-mode 1))
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+#+END_SRC
+
+Enabling IDO for M-x (Smex)
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure t
+    :init (smex-initialize)
+    :bind ("M-x" . smex))
+#+END_SRC
+
+Enabling iBuffer expert mode
+#+BEGIN_SRC emacs-lisp
+  (setq ibuffer-expert t)
+#+END_SRC
+** ORG Mode
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-window-setup 'current-window)
+#+END_SRC
