@@ -1,13 +1,14 @@
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 
+(setq package-check-signature nil)
+(package-initialize)
+
 (require 'package)
 (setq package-enable-at-startup nil)
 
 ;;; remove SC if you are not using sunrise commander and org if you like outdated packages
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")))
-(setq package-check-signature nil)
-(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
