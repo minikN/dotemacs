@@ -8,7 +8,7 @@
 (setq package-enable-at-startup nil)
 
 ;;; remove SC if you are not using sunrise commander and org if you like outdated packages
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
+(setq package-archives '(("melpa" . "http://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
