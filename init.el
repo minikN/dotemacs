@@ -8,8 +8,4 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(unless (package-installed-p 'monokai-pro-theme)
-  (package-refresh-contents)
-  (package-install 'monokai-pro-theme))
-
 (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
