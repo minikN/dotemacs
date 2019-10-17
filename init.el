@@ -1,7 +1,3 @@
-(setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
-
-(setq package-check-signature nil)
 (package-initialize)
 
 (require 'package)
