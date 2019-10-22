@@ -16,5 +16,5 @@
 (defun cygwin-shell ()
   "Run cygwin bash in shell mode."
   (interactive)
-  (let ((explicit-shell-file-name "~/bin/bash"))
+  (let ((explicit-shell-file-name "~/bin/bash --login"))
     (call-interactively 'shell)))
