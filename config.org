@@ -23,13 +23,6 @@ y/n instead of yes/no:
     :init
     (which-key-mode))
 #+END_SRC
-*** org-bullets
-#+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
-#+END_SRC
 *** Avy (Searching in buffer)
 #+BEGIN_SRC emacs-lisp
   (use-package avy
@@ -110,6 +103,14 @@ Set frame margin color:
   (set-face-background 'fringe "transparent")
 #+END_SRC
 
+** Fonts
+On Windows:
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (set-face-attribute 'default nil :font "Inconsolata-11")
+  )
+#+END_SRC
+   
 ** Editor
 Enable normal scroll mode:
 #+BEGIN_SRC emacs-lisp

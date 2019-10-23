@@ -12,11 +12,6 @@
   :init
   (which-key-mode))
 
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
-
 (use-package avy
   :ensure t
   :bind
@@ -62,6 +57,10 @@
 (set-window-buffer nil (current-buffer))
 
 (set-face-background 'fringe "transparent")
+
+(if (eq system-type 'windows-nt)
+    (set-face-attribute 'default nil :font "Inconsolata-11")
+)
 
 (setq scroll-conservatively 100)
 
