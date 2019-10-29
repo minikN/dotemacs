@@ -2,12 +2,11 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(unless (package-installed-p 'spacemacs-theme)
-  (package-refresh-contents)
-  (package-install 'spacemacs-theme))
-
-(custom-set-variables '(spacemacs-theme-custom-colors
-			'((base . "#00ff00"))))
+(use-package monokai-pro-theme
+  :ensure t
+  :init
+  (load-theme 'monokai-pro t))
+(monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
 
 (use-package which-key
   :ensure t
@@ -23,6 +22,10 @@
   :ensure t
   :bind
   ("M-s" . avy-goto-char))
+
+(use-package swiper
+  :ensure t
+  :bind ("C-s" . swiper))
 
 (use-package hungry-delete
   :ensure t
@@ -66,6 +69,14 @@
 (use-package popup-kill-ring
   :ensure t
   :bind ("M-y" . 'popup-kill-ring))
+
+(use-package mark-multiple
+  :ensure t
+  :bind ("C-c q" . 'mark-next-like-this))
+
+(use-package expand-region
+  :ensure t
+  :bind ("C-q" . 'er/expand-region))
 
 (global-set-key (kbd "<s-return>") 'ansi-term)
 
@@ -151,6 +162,12 @@
   (newline-and-indent))
 (global-set-key (kbd "C-c O") 'new-line-below)
 
+(defun what-face (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+		  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -199,5 +216,11 @@
 ;; Open temporary buffer in same window'C'
 ; (setq org-src-window-setup 'current-window)
 
+;; Indent properly
+(add-hook 'org-mode-hook 'org-indent-mode)
+
 (add-to-list 'org-structure-template-alist
 	     '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+
+(use-package php-mode
+  :ensure t)
