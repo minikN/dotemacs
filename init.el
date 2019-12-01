@@ -25,11 +25,11 @@
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (expand-region mark-multiple swiper php-mode spacemacs-theme company popup-kill-ring doom-modeline monokai-pro-classic-theme rainbow-delimiters sudo-edit hungry-delete smex ido-vertical-mode avy org-bullets which-key monokai-pro-theme use-package)))
+    (quelpa-use-package company-box expand-region mark-multiple swiper php-mode spacemacs-theme company popup-kill-ring doom-modeline monokai-pro-classic-theme rainbow-delimiters sudo-edit hungry-delete smex ido-vertical-mode avy org-bullets which-key monokai-pro-theme use-package)))
  '(spacemacs-theme-custom-colors (quote ((base . "#00ff00")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(php-assignment-op ((t (:inherit php-operator :foreground "blue")))))

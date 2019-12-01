@@ -11,11 +11,11 @@ y/n instead of yes/no:
 ** Packages
 *** Theme
 #+BEGIN_SRC emacs-lisp
-  (use-package monokai-pro-theme
-    :ensure t
-    :init
-    (load-theme 'monokai-pro t))
-  (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
+    (use-package monokai-pro-theme
+      :ensure t
+      :init
+     (load-theme 'monokai-pro t))
+    (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
 #+END_SRC
 *** which-key
 #+BEGIN_SRC emacs-lisp
@@ -30,6 +30,10 @@ y/n instead of yes/no:
     :ensure t
     :init
     (add-hook 'after-init-hook 'global-company-mode))
+
+  (use-package company-box
+    :ensure t
+    :hook (company-mode . company-box-mode))
 #+END_SRC
 *** Avy (Searching in visible buffer)
 #+BEGIN_SRC emacs-lisp

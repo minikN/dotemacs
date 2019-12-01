@@ -5,7 +5,7 @@
 (use-package monokai-pro-theme
   :ensure t
   :init
-  (load-theme 'monokai-pro t))
+ (load-theme 'monokai-pro t))
 (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
 
 (use-package which-key
@@ -17,6 +17,10 @@
   :ensure t
   :init
   (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
 (use-package avy
   :ensure t
