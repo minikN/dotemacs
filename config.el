@@ -1,5 +1,3 @@
-(defvar TERM_SHELL "/bin/bash")
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (use-package monokai-pro-theme
@@ -82,7 +80,50 @@
   :ensure t
   :bind ("C-q" . 'er/expand-region))
 
-(global-set-key (kbd "<s-return>") 'ansi-term)
+(use-package tex
+  :defer t
+  :ensure auctex
+  :config
+  (setq TeX-auto-save t))
+;(TeX-PDF-mode t)
+
+;; Use pdf-tools to open PDF files
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-source-correlate-start-server t)
+
+;; Update PDF buffers after successful LaTeX runs
+(add-hook 'TeX-after-compilation-finished-functions
+           #'TeX-revert-document-buffer)
+
+; =pdf-tools= for previewing pdf files with =auctex=
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install
+   (setq-default pdf-view-display-size 'fit-page)))
+
+; =org-pdfview= for previewing pdf files with =org-mode=
+(use-package org-pdfview
+  :ensure t
+  :after (org)
+  :config
+  (add-to-list 'org-file-apps
+	       '("\\.pdf\\'" . (lambda (file link)
+				 (org-pdfview-open link)))))
+
+(add-hook 'pdf-view-mode-hook 'auto-revert-mode)
+
+; auto reload pdf view on save
+(defun toggle-org-latex-export-on-save ()
+  (interactive)
+  (if (memq 'org-latex-export-to-pdf after-save-hook)
+      (progn
+	(remove-hook 'after-save-hook 'org-latex-export-to-pdf t)
+	(message "Disabled org html export on save for current buffer..."))
+    (add-hook 'after-save-hook 'org-latex-export-to-pdf nil t)
+    (message "Enabled org html export on save for current buffer...")))
+
+(global-set-key (kbd "^") 'shell)
 
 (global-set-key (kbd "C-c e") 'config-edit)
 (global-set-key (kbd "C-c r") 'config-reload)
@@ -91,6 +132,14 @@
 
 (global-set-key (kbd "C-x 2") 'split-and-focus-h)
 (global-set-key (kbd "C-x 3") 'split-and-focus-v)
+
+(if (eq system-type 'windows-nt)
+    (defun run-bash ()
+      (interactive)
+      (let ((shell-file-name "C:\\msys64\\usr\\bin\\bash.exe"))
+        (shell "*bash*"))
+      )
+)
 
 (defun config-edit ()
   (interactive)
@@ -175,6 +224,11 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
+(window-divider-mode 1)
+
+(setq-default window-divider-default-right-width 1)
+(set-face-foreground 'window-divider (face-attribute 'default :background))
+(set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
 
 (setq inhibit-startup-message t)
 
@@ -205,10 +259,6 @@
 			    (?\' . ?\')
 			    ))
 (electric-pair-mode 1)
-
-(defadvice ansi-term (before force-bash)
-  (interactive (list TERM_SHELL)))
-(ad-activate 'ansi-term)
 
 (line-number-mode 1)
 (column-number-mode 1)

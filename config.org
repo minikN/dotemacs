@@ -1,8 +1,4 @@
 * Emacs Configuration
-** Variables
-#+BEGIN_SRC emacs-lisp
-  (defvar TERM_SHELL "/bin/bash")
-#+END_SRC
 ** Aliases
 y/n instead of yes/no:
 #+BEGIN_SRC emacs-lisp
@@ -125,10 +121,57 @@ Enabling iBuffer expert mode
     :ensure t
     :bind ("C-q" . 'er/expand-region))
 #+END_SRC
+*** LaTeX
+#+BEGIN_SRC emacs-lisp
+  (use-package tex
+    :defer t
+    :ensure auctex
+    :config
+    (setq TeX-auto-save t))
+  ;(TeX-PDF-mode t)
+
+  ;; Use pdf-tools to open PDF files
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-source-correlate-start-server t)
+
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+             #'TeX-revert-document-buffer)
+#+END_SRC
+*** PDF
+#+BEGIN_SRC emacs-lisp
+  ; =pdf-tools= for previewing pdf files with =auctex=
+  (use-package pdf-tools
+    :ensure t
+    :config
+    (pdf-tools-install
+     (setq-default pdf-view-display-size 'fit-page)))
+
+  ; =org-pdfview= for previewing pdf files with =org-mode=
+  (use-package org-pdfview
+    :ensure t
+    :after (org)
+    :config
+    (add-to-list 'org-file-apps
+		 '("\\.pdf\\'" . (lambda (file link)
+				   (org-pdfview-open link)))))
+
+  (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
+
+  ; auto reload pdf view on save
+  (defun toggle-org-latex-export-on-save ()
+    (interactive)
+    (if (memq 'org-latex-export-to-pdf after-save-hook)
+	(progn
+	  (remove-hook 'after-save-hook 'org-latex-export-to-pdf t)
+	  (message "Disabled org html export on save for current buffer..."))
+      (add-hook 'after-save-hook 'org-latex-export-to-pdf nil t)
+      (message "Enabled org html export on save for current buffer...")))
+#+END_SRC
 ** Keybindings
 Terminal:
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<s-return>") 'ansi-term)
+  (global-set-key (kbd "^") 'shell)
 #+END_SRC
 
 Config:
@@ -148,6 +191,16 @@ Windows:
   (global-set-key (kbd "C-x 3") 'split-and-focus-v)
 #+END_SRC
 ** Functions
+*** terminal
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (defun run-bash ()
+        (interactive)
+        (let ((shell-file-name "C:\\msys64\\usr\\bin\\bash.exe"))
+          (shell "*bash*"))
+        )
+  )
+#+END_SRC
 *** config
 #+BEGIN_SRC emacs-lisp
   (defun config-edit ()
@@ -258,7 +311,15 @@ Remove tool-, menu- and scrollbar:
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (scroll-bar-mode -1) 
+  (scroll-bar-mode -1)
+  (window-divider-mode 1)
+#+END_SRC
+
+Make the divider invisible
+#+BEGIN_SRC emacs-lisp
+  (setq-default window-divider-default-right-width 1)
+  (set-face-foreground 'window-divider (face-attribute 'default :background))
+  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
 #+END_SRC
 
 Remove startup buffer:
@@ -321,13 +382,6 @@ Autocomplete (, [, {
 			      (?\' . ?\')
 			      ))
   (electric-pair-mode 1)
-#+END_SRC
-** Terminal
-Set the default shell to bash for =ansi-term=:
-#+BEGIN_SRC emacs-lisp
-  (defadvice ansi-term (before force-bash)
-    (interactive (list TERM_SHELL)))
-  (ad-activate 'ansi-term)
 #+END_SRC
 ** Modeline
 *** Show lines and columns 
