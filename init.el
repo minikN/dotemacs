@@ -8,11 +8,14 @@
 ;(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+  (package-refresh-contents))
 
 (when (file-readable-p "~/.emacs.d/config.org")
   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+
+;; Font
+(add-to-list 'default-frame-alist '(font . "Inconsolata-12" ))
+(set-face-attribute 'default t :font "Inconsolata-12")
 
 (setenv "PS1" "\\[\\e[33m\\]\\w\\[\\e[0m\\] \\> ")
 (custom-set-variables

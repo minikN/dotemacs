@@ -5,13 +5,33 @@ y/n instead of yes/no:
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 ** Packages
+*** straight.el (package manager)
+#+BEGIN_SRC emacs-lisp
+  (setq straight-use-package-by-default t) 
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+  (straight-use-package 'use-package)
+#+END_SRC
 *** Theme
 #+BEGIN_SRC emacs-lisp
-    (use-package monokai-pro-theme
-      :ensure t
-      :init
-     (load-theme 'monokai-pro t))
-    (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
+
+  (straight-use-package
+   '(emacs-monokai-pro-theme :host github :repo "minikN/emacs-monokai-pro-theme"
+                             :branch "master")
+   :init (load-theme 'monokai-pro t))
+
+
+  (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
 #+END_SRC
 *** which-key
 #+BEGIN_SRC emacs-lisp
@@ -123,20 +143,20 @@ Enabling iBuffer expert mode
 #+END_SRC
 *** LaTeX
 #+BEGIN_SRC emacs-lisp
-  (use-package tex
-    :defer t
-    :ensure auctex
-    :config
-    (setq TeX-auto-save t))
+  ;(use-package tex
+  ;  :defer t
+  ;  :ensure auctex
+  ;  :config
+  ;  (setq TeX-auto-save t))
   ;(TeX-PDF-mode t)
 
   ;; Use pdf-tools to open PDF files
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-        TeX-source-correlate-start-server t)
+  ;(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+  ;      TeX-source-correlate-start-server t)
 
   ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-compilation-finished-functions
-             #'TeX-revert-document-buffer)
+  ;(add-hook 'TeX-after-compilation-finished-functions
+  ;           #'TeX-revert-document-buffer)
 #+END_SRC
 *** PDF
 #+BEGIN_SRC emacs-lisp
@@ -171,7 +191,7 @@ Enabling iBuffer expert mode
 ** Keybindings
 Terminal:
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "^") 'shell)
+  (global-set-key (kbd "^") 'ansi-term)
 #+END_SRC
 
 Config:
@@ -192,6 +212,15 @@ Windows:
 #+END_SRC
 ** Functions
 *** terminal
+Setting default shell to bash
+#+BEGIN_SRC emacs-lisp
+  (defvar my-term-shell "/bin/bash")
+  (defadvice ansi-term (before force-bash)
+    (interactive (list my-term-shell)))
+  (ad-activate 'ansi-term)
+#+END_SRC
+
+setting default shell to bash (on windows)
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'windows-nt)
       (defun run-bash ()
@@ -200,6 +229,15 @@ Windows:
           (shell "*bash*"))
         )
   )
+#+END_SRC
+
+Open terminal in a new vertical window
+#+BEGIN_SRC emacs-lisp
+  (defun run-term-vertical ()
+    (interactive)
+    (progn 
+            'split-and-focus-v
+            'ansi-term))
 #+END_SRC
 *** config
 #+BEGIN_SRC emacs-lisp
@@ -228,11 +266,11 @@ Focus new window after creation
     (other-window 1))
 #+END_SRC
 *** fullscreen (windows only)
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp  
   (if (eq system-type 'windows-nt)
-      (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
-      (global-set-key [f11] 'toggle-full-screen)
-  )
+        (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
+        (global-set-key [f11] 'toggle-full-screen)
+    )
 #+END_SRC
 *** kill current buffer immediately
 #+BEGIN_SRC emacs-lisp
@@ -307,12 +345,24 @@ Focus new window after creation
       (if face (message "Face: %s" face) (message "No face at %d" pos))))
 #+END_SRC
 ** UI
+Start emacs in full screen:
+#+BEGIN_SRC emacs-lisp
+  (custom-set-variables
+   '(initial-frame-alist (quote ((fullscreen . maximized)))))
+#+END_SRC
+
 Remove tool-, menu- and scrollbar:
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (window-divider-mode 1)
+#+END_SRC
+
+Set font
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist '(font . "Inconsolata-11"))
+  (set-face-attribute 'default t :font "Inconsolata-11")
 #+END_SRC
 
 Make the divider invisible
@@ -338,14 +388,6 @@ Set frame margin color:
   (set-face-background 'fringe "transparent")
 #+END_SRC
 
-** Fonts
-On Windows:
-#+BEGIN_SRC emacs-lisp
-  (if (eq system-type 'windows-nt)
-      (set-face-attribute 'default nil :font "Inconsolata-11")
-  )
-#+END_SRC
-   
 ** Editor
 Enable normal scroll mode:
 #+BEGIN_SRC emacs-lisp

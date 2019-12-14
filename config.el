@@ -1,9 +1,26 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(use-package monokai-pro-theme
-  :ensure t
-  :init
- (load-theme 'monokai-pro t))
+(setq straight-use-package-by-default t) 
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
+
+(straight-use-package
+ '(emacs-monokai-pro-theme :host github :repo "minikN/emacs-monokai-pro-theme"
+                           :branch "master")
+ :init (load-theme 'monokai-pro t))
+
+
 (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)
 
 (use-package which-key
@@ -80,20 +97,20 @@
   :ensure t
   :bind ("C-q" . 'er/expand-region))
 
-(use-package tex
-  :defer t
-  :ensure auctex
-  :config
-  (setq TeX-auto-save t))
+;(use-package tex
+;  :defer t
+;  :ensure auctex
+;  :config
+;  (setq TeX-auto-save t))
 ;(TeX-PDF-mode t)
 
 ;; Use pdf-tools to open PDF files
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-      TeX-source-correlate-start-server t)
+;(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+;      TeX-source-correlate-start-server t)
 
 ;; Update PDF buffers after successful LaTeX runs
-(add-hook 'TeX-after-compilation-finished-functions
-           #'TeX-revert-document-buffer)
+;(add-hook 'TeX-after-compilation-finished-functions
+;           #'TeX-revert-document-buffer)
 
 ; =pdf-tools= for previewing pdf files with =auctex=
 (use-package pdf-tools
@@ -123,7 +140,7 @@
     (add-hook 'after-save-hook 'org-latex-export-to-pdf nil t)
     (message "Enabled org html export on save for current buffer...")))
 
-(global-set-key (kbd "^") 'shell)
+(global-set-key (kbd "^") 'ansi-term)
 
 (global-set-key (kbd "C-c e") 'config-edit)
 (global-set-key (kbd "C-c r") 'config-reload)
@@ -133,6 +150,11 @@
 (global-set-key (kbd "C-x 2") 'split-and-focus-h)
 (global-set-key (kbd "C-x 3") 'split-and-focus-v)
 
+(defvar my-term-shell "/bin/bash")
+(defadvice ansi-term (before force-bash)
+  (interactive (list my-term-shell)))
+(ad-activate 'ansi-term)
+
 (if (eq system-type 'windows-nt)
     (defun run-bash ()
       (interactive)
@@ -140,6 +162,12 @@
         (shell "*bash*"))
       )
 )
+
+(defun run-term-vertical ()
+  (interactive)
+  (progn 
+          'split-and-focus-v
+          'ansi-term))
 
 (defun config-edit ()
   (interactive)
@@ -162,9 +190,9 @@
   (other-window 1))
 
 (if (eq system-type 'windows-nt)
-    (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
-    (global-set-key [f11] 'toggle-full-screen)
-)
+      (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
+      (global-set-key [f11] 'toggle-full-screen)
+  )
 
 (defun kill-current-buffer ()
   (interactive)
@@ -221,10 +249,16 @@
 		  (get-char-property (pos) 'face))))
     (if face (message "Face: %s" face) (message "No face at %d" pos))))
 
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (window-divider-mode 1)
+
+(add-to-list 'default-frame-alist '(font . "Inconsolata-11"))
+(set-face-attribute 'default t :font "Inconsolata-11")
 
 (setq-default window-divider-default-right-width 1)
 (set-face-foreground 'window-divider (face-attribute 'default :background))
@@ -236,10 +270,6 @@
 (set-window-buffer nil (current-buffer))
 
 (set-face-background 'fringe "transparent")
-
-(if (eq system-type 'windows-nt)
-    (set-face-attribute 'default nil :font "Inconsolata-11")
-)
 
 (setq scroll-conservatively 100)
 
