@@ -1,3 +1,7 @@
+;; immediately go full screen
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
 ;; setup straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
