@@ -11,16 +11,20 @@
 ** User Interface
 *** Theme
 #+BEGIN_SRC emacs-lisp
-    (straight-use-package
-     '(emacs-monokai-pro-theme
-       :type git
-       :host github
-       :repo "minikN/emacs-monokai-pro-theme"))
+    ;(straight-use-package
+    ; '(emacs-monokai-pro-theme
+    ;   :type git
+    ;   :host github
+    ;   :repo "minikN/emacs-monokai-pro-theme"))
 
   ;(when (require 'monokai-pro-theme nil 'noerror)
   ;  (progn
   ;    (load-theme 'monokai-pro t)
   ;    (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)))
+
+  (use-package monokai-pro-theme
+    :straight (emacs-monokai-pro-theme :host github :repo "minikN/emacs-monokai-pro-theme")
+    :init (load-theme 'monokai-pro t))
 #+END_SRC
 *** Modeline
 Set modeline to doom-modeline
@@ -40,7 +44,7 @@ Show line and column numbers in modeline
 *** Window
 Remove tool-, menu- and scroll bar
 #+BEGIN_SRC emacs-lisp
-  (tool-bar-mode -1)
+ ; (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (window-divider-mode 1)
@@ -48,9 +52,9 @@ Remove tool-, menu- and scroll bar
 
 Make divider invisible
 #+BEGIN_SRC emacs-lisp
-;  (setq-default window-divider-default-right-width 1)
-;  (set-face-foreground 'window-divider (face-attribute 'default :background))
-;  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
+  (setq-default window-divider-default-right-width 1)
+  (set-face-foreground 'window-divider (face-attribute 'default :background))
+  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
 #+END_SRC
 
 Remove startup buffer
