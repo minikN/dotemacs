@@ -20,11 +20,12 @@
   ;(when (require 'monokai-pro-theme nil 'noerror)
   ;  (progn
   ;    (load-theme 'monokai-pro t)
-  ;    (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces)))
+  ;    ))
 
   (use-package monokai-pro-theme
     :straight (emacs-monokai-pro-theme :host github :repo "minikN/emacs-monokai-pro-theme")
-    :init (load-theme 'monokai-pro t))
+    :init (load-theme 'monokai-pro t)
+    (monokai-pro-theme-set-faces 'monokai-pro monokai-pro-spectrum-theme-colors monokai-pro-faces))
 #+END_SRC
 *** Modeline
 Set modeline to doom-modeline
@@ -44,17 +45,20 @@ Show line and column numbers in modeline
 *** Window
 Remove tool-, menu- and scroll bar
 #+BEGIN_SRC emacs-lisp
- ; (tool-bar-mode -1)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0)
   (menu-bar-mode -1)
-  (scroll-bar-mode -1)
   (window-divider-mode 1)
+
+  ;(add-to-list 'default-frame-alist
+  ;             '(vertical-scroll-bars . nil))
 #+END_SRC
 
 Make divider invisible
 #+BEGIN_SRC emacs-lisp
-  (setq-default window-divider-default-right-width 1)
-  (set-face-foreground 'window-divider (face-attribute 'default :background))
-  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
+;  (setq-default window-divider-default-right-width 1)
+;  (set-face-foreground 'window-divider (face-attribute 'default :background))
+;  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
 #+END_SRC
 
 Remove startup buffer
@@ -64,9 +68,9 @@ Remove startup buffer
 
 Set frame margins
 #+BEGIN_SRC emacs-lisp
-  (setq-default left-margin-width 1 right-margin-width 1)
-  (set-window-buffer nil (current-buffer))
-  (set-face-background 'fringe "transparent")
+;  (setq-default left-margin-width 1 right-margin-width 1)
+;  (set-window-buffer nil (current-buffer))
+;  (set-face-background 'fringe "transparent")
 #+END_SRC
 
 *** Editor
@@ -123,18 +127,15 @@ Search in visible buffer
 *** company
 Autocompletion in a popup
 #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :straight t
-       :init (add-hook 'after-init-hook 'global-company-mode))
-     (use-package company-box
-       :straight t
-       :init (add-hook 'company-mode-hook 'company-box-mode))
+  (use-package company
+    :straight t
+    :init (add-hook 'after-init-hook 'global-company-mode))
 
-    ; (add-hook 'comp)
-
-  ;   (use-package company-posframe
-   ;    :straight t
-    ;   :init (company-posframe-mode 1))
+  (use-package company-box
+    :straight (company-box :host github :repo "minikN/company-box")
+    :init (add-hook 'company-mode-hook 'company-box-mode)
+    (setq company-box-scrollbar nil)
+    (setq company-box-icon-left-margin 2))
 #+END_SRC
 *** expand-region
 Expand selection to region

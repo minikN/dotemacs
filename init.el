@@ -1,7 +1,3 @@
-;; immediately go full screen
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . maximized)))))
-
 ;; setup straight.el
 (defvar bootstrap-version)
 (setq straight-repository-branch "develop")
@@ -21,6 +17,15 @@
 ;; load config file
 (when (file-readable-p "~/.emacs.d/config.org")
   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
-
-		      
-		      
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-box-scrollbar nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
