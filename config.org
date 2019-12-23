@@ -11,17 +11,6 @@
 ** User Interface
 *** Theme
 #+BEGIN_SRC emacs-lisp
-    ;(straight-use-package
-    ; '(emacs-monokai-pro-theme
-    ;   :type git
-    ;   :host github
-    ;   :repo "minikN/emacs-monokai-pro-theme"))
-
-  ;(when (require 'monokai-pro-theme nil 'noerror)
-  ;  (progn
-  ;    (load-theme 'monokai-pro t)
-  ;    ))
-
   (use-package monokai-pro-theme
     :straight (emacs-monokai-pro-theme :host github :repo "minikN/emacs-monokai-pro-theme")
     :init (load-theme 'monokai-pro t)
@@ -45,8 +34,8 @@ Show line and column numbers in modeline
 *** Window
 Remove tool-, menu- and scroll bar
 #+BEGIN_SRC emacs-lisp
-  (tool-bar-mode 0)
-  (scroll-bar-mode 0)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (window-divider-mode 1)
 
@@ -129,13 +118,22 @@ Autocompletion in a popup
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :straight t
-    :init (add-hook 'after-init-hook 'global-company-mode))
+    :diminish company-mode
+    :init (add-hook 'after-init-hook 'global-company-mode)
+    :custom
+    (company-idle-delay 0)
+    (company-echo-delay 0)
+    (company-minimum-prefix-length 1))
 
   (use-package company-box
     :straight (company-box :host github :repo "minikN/company-box")
-    :init (add-hook 'company-mode-hook 'company-box-mode)
-    (setq company-box-scrollbar nil)
-    (setq company-box-icon-left-margin 2))
+    :diminish
+    :hook (company-mode . company-box-mode)
+    :init (setq company-box-show-single-candidate t
+                company-box-max-candidates 50
+                company-box-doc-enable nil
+                company-box-icon-left-margin 1
+                company-box-scrollbar nil))
 #+END_SRC
 *** expand-region
 Expand selection to region
@@ -177,34 +175,34 @@ Make the buffer-list vertical
 *** LSP mode
 Basic LSP mode setup
 #+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :straight t
-    :config (setq lsp-prefer-flymake nil)
-    :init (add-hook 'php-mode-hook 'lsp)
-    :commands lsp)
+  ;(use-package lsp-mode
+  ;  :straight t
+  ;  :config (setq lsp-prefer-flymake nil)
+  ;  :init (add-hook 'php-mode-hook 'lsp)
+  ;  :commands lsp)
 
   ;; optionally
-  (use-package lsp-ui
-    :straight t
-    :after (lsp-mode)
-    :config (setq lsp-ui-doc-enable t
-                  lsp-ui-doc-use-childframe t
-                  lsp-ui-doc-position ‘top
-                  lsp-ui-doc-include-signature t
-                  lsp-ui-sideline-enable nil
-                  lsp-ui-flycheck-enable t
-                  lsp-ui-flycheck-list-position ‘right
-                  lsp-ui-flycheck-live-reporting t
-                  lsp-ui-peek-enable t
-                  lsp-ui-peek-list-width 60
-                  lsp-ui-peek-peek-height 25
-                  lsp-ui-sideline-enable nil
-                  (add-hook 'lsp-mode-hook ‘lsp-ui-mode))
-    :commands lsp-ui-mode)
+  ;(use-package lsp-ui
+  ;  :straight t
+  ;  :after (lsp-mode)
+  ;  :config (setq lsp-ui-doc-enable t
+  ;                lsp-ui-doc-use-childframe nil
+  ;                lsp-ui-doc-position ‘top
+  ;                lsp-ui-doc-include-signature nil
+  ;                lsp-ui-sideline-enable nil
+  ;                lsp-ui-flycheck-enable t
+  ;                lsp-ui-flycheck-list-position ‘right
+  ;                lsp-ui-flycheck-live-reporting t
+  ;                lsp-ui-peek-enable t
+  ;                lsp-ui-peek-list-width 60
+  ;                lsp-ui-peek-peek-height 25
+  ;                lsp-ui-sideline-enable nil
+  ;                (add-hook 'lsp-mode-hook ‘lsp-ui-mode))
+  ;  :commands lsp-ui-mode)
 
-  (use-package company-lsp
-    :straight t
-    :commands company-lsp)
+  ;(use-package company-lsp
+  ;  :straight t
+  ;  :commands company-lsp)
 #+END_SRC
 *** mark-multiple
 Mark multiple occureces of the same selection
@@ -249,13 +247,6 @@ Install php-mode
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :straight t)
-#+END_SRC
-*** popup-kill-ring
-Display the kill-ring in a popup
-#+BEGIN_SRC emacs-lisp
-  (use-package popup-kill-ring
-    :straight t
-    :init (global-set-key (kbd "M-y") #'popup-kill-ring))
 #+END_SRC
 *** rainbow-delimiters
 Color matching delimiters (==(, {, [==) in different colors
