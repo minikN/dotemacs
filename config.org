@@ -215,6 +215,12 @@ Make the buffer-list vertical
     (setq TeX-auto-save t)
     (setq TeX-parse-self t))
 #+END_SRC
+*** linum-relative
+#+BEGIN_SRC emacs-lisp
+    (use-package linum-relative
+      :straight t
+      :hook (prog-mode . linum-relative-mode))
+#+END_SRC
 *** LSP mode
 Basic LSP mode setup
 #+BEGIN_SRC emacs-lisp
@@ -345,13 +351,12 @@ Show possible completions in mini-buffer
 #+END_SRC
 *** yasnippet
 #+BEGIN_SRC emacs-lisp
-  (use-package yasnippet                  ; Snippets
+  (use-package yasnippet
     :straight t
     :hook (org-mode . yas-minor-mode)
     :config
     (with-eval-after-load 'yasnippet
       (setq yas-snippet-dirs '("~/.emacs.d/snippets")))
-
     (yas-reload-all))
 #+END_SRC
 ** Keybindings
@@ -367,7 +372,7 @@ Show possible completions in mini-buffer
 #+END_SRC
 *** Terminal
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "^") 'run-term-vertical)
+  (global-set-key (kbd "<C-return>") 'run-term-vertical)
 #+END_SRC
 
 *** Windows
