@@ -37,31 +37,16 @@ Remove tool-, menu- and scroll bar
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
-  (window-divider-mode 1)
+  (window-divider-mode -1)
 
   ;(add-to-list 'default-frame-alist
   ;             '(vertical-scroll-bars . nil))
-#+END_SRC
-
-Make divider invisible
-#+BEGIN_SRC emacs-lisp
-;  (setq-default window-divider-default-right-width 1)
-;  (set-face-foreground 'window-divider (face-attribute 'default :background))
-;  (set-face-foreground 'window-divider-first-pixel (face-attribute 'window-divider-last-pixel :foreground))
 #+END_SRC
 
 Remove startup buffer
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-message t)
 #+END_SRC
-
-Set frame margins
-#+BEGIN_SRC emacs-lisp
-;  (setq-default left-margin-width 1 right-margin-width 1)
-;  (set-window-buffer nil (current-buffer))
-;  (set-face-background 'fringe "transparent")
-#+END_SRC
-
 *** Editor
 Set font
 #+BEGIN_SRC emacs-lisp
