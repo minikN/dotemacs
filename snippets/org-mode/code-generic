@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Insert generic code block.
+# key: cg
+# --
+#+BEGIN_SRC $1
+$0
+#+END_SRC

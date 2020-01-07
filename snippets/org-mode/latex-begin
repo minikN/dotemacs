@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: LaTeX: Begin a block (paragraph, section, ...).
+# key: lb
+# --
+#+LaTeX: \begin{${1:abstract}}
+
+$0
+
+#+LaTeX: \end{$1}

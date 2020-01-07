@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: emacs-lisp
-# key: el
+# name: Insert elisp code block.
+# key: cel
 # --
 #+BEGIN_SRC emacs-lisp
 $0

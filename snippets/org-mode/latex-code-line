@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: LaTeX: Insert a code line.
+# key: lcl
+# --
+#+LaTeX: \\$0

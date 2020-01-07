@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: LaTeX: Insert a code block..
+# key: lcb
+# --
+#+BEGIN_EXPORT latex
+$0
+#+END_EXPORT
