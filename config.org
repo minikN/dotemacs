@@ -442,7 +442,7 @@ Inspect the face under the cursor
 ** Other
 No backups/autosaves
 #+BEGIN_SRC emacs-lisp
-  (setq make-backup-file nil)
+  (setq make-backup-files nil)
   (setq auto-save-default nil)
 #+END_SRC
 
