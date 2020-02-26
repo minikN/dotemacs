@@ -418,6 +418,16 @@ Install php-mode
   (use-package php-mode
     :straight (php-mode :host github :repo "minikN/php-mode"))
 #+END_SRC
+*** popup-switcher
+#+BEGIN_SRC emacs-lisp
+  (use-package popup-switcher
+    :straight t)
+#+END_SRC
+*** projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :straight t)
+#+END_SRC
 *** smex
 IDO-like list for M-x
 #+BEGIN_SRC emacs-lisp
@@ -440,7 +450,7 @@ Search in whole buffer
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :straight t
-    :init (global-set-key (kbd "C-s") #'swiper))
+    :init (global-set-key (kbd "C-p") #'swiper))
 #+END_SRC
 *** which-key
 Show possible completions in mini-buffer
@@ -514,6 +524,14 @@ Kill all buffers
     (delete-other-windows))
   (global-set-key (kbd "C-x K") 'kill-all-buffers)
 #+END_SRC
+*** LaTeX
+Compile LLNCS document and open
+#+BEGIN_SRC emacs-lisp
+  (defun compile-llncs-and-open ()
+    (interactive)
+    (compile compile-command)
+    (find-file-other-window (concat (file-name-sans-extension buffer-file-name) ".pdf")))
+#+END_SRC
 *** Terminal
 Set default shell for ansi-term to bash
 #+BEGIN_SRC emacs-lisp
@@ -556,10 +574,6 @@ Inspect the face under the cursor
       (if face (message "Face: %s" face) (message "No face at %d" pos))))
 #+END_SRC
 ** Other
-Disable flymake completely
-#+BEGIN_SRC emacs-lisp
-#+END_SRC
-
 No backups/autosaves
 #+BEGIN_SRC emacs-lisp
   (setq make-backup-files nil)
